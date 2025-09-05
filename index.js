@@ -1,15 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import connectDB from "./db/config.js"; // ✅ make sure .js extension is used if type=module
-
+import connectDB from "./db/config.js";
+import app from "./app.js";
 dotenv.config();
 
-const app = express();
 const PORT = process.env.PORT || 8000;
-
-// Middleware
-app.use(express.json());
 
 // MongoDB connection
 connectDB();
