@@ -1,20 +1,26 @@
+import express from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
-import app from "./app.js";
-import connectDB from "./db/config.js";
 
-// Load environment variables
-dotenv.config({ path: "./.env" });
+dotenv.config();
 
-// Connect to MongoDB and start the server
-connectDB()
-  .then(() => {
-    console.log(`MongoDB connected successfully!`);
-    const port = process.env.PORT || 3000; // Default port if not specified
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
+const app = express();
+const PORT = process.env.PORT || 8000;
+
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((err) => {
-    console.error("MongoDB connection failed:", err);
-    process.exit(1); // Exit the process with failure
-  });
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err.message));
+
+// Basic route
+app.get("/", (req, res) => {
+  res.send("Server is running and MongoDB connected!");
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
